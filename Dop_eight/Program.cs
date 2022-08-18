@@ -7,13 +7,11 @@
 // - Sum – найдется сумма всех элементов чисел
 // Можно добавить своих команд для работы с числовыми массивами
 Console.Clear();
-void SetNumbers(ref string[] myArray)
+void SetNumbers(ref int[] myArray)
 {
-    Console.Write("Введите числа через пробел, которые мы добавим в массив: ");
-    myArray = Console.ReadLine().Split(new Char[] { ' ' });
-    Console.WriteLine("Элементы добавлены)!");
+    myArray = Array.ConvertAll(Console.ReadLine().Split( ' ' ),int.Parse);
 }
-void PrintArr(ref string[] myArray)
+void PrintArr(ref int[] myArray)
 {
     for(int i =0; i < myArray.Length; i++)
     {
@@ -21,22 +19,22 @@ void PrintArr(ref string[] myArray)
     }
     Console.WriteLine();
 }
-void AddNumbers(ref string[] myArray,string decision)
+void AddNumbers(ref int[] myArray,string decision)   
 {
     Array.Resize(ref myArray, (myArray.Length + 1));
-    myArray[myArray.Length - 1] = decision;
+    myArray[myArray.Length - 1] = Convert.ToInt32(decision);
 }
-void RemoveNumbers(ref string[] myArray,string number)
+void RemoveNumbers(ref int[] myArray,string number)
 {
     int icopy =0;
-    string[] myarr ={};
+    int[] myarr ={};
     for(int i =0; i < myArray.Length; i++)
     {
-        if(myArray[i]==number)
+        if(myArray[i]==Convert.ToInt32(number))
         {       
             icopy = i;   
             int b =0;
-            myarr =new string[myArray.Length - (icopy+1)];
+            myarr =new int[myArray.Length - (icopy+1)];
             i++;
             while(i<myArray.Length)
             {        
@@ -52,9 +50,8 @@ void RemoveNumbers(ref string[] myArray,string number)
     {           
             myArray[c] = myarr[b];
     }
-    Console.WriteLine($"Число {number} удалено!(");
 }
-int Sum(string[] myArray)
+int Sum(int[] myArray)
 {
     int sum =0;
     for(int i =0; i < myArray.Length; i++)
@@ -63,24 +60,24 @@ int Sum(string[] myArray)
     }
     return sum;
 }
-bool CheckForInteraction(ref string[] myArray)
+bool CheckForInteraction(ref int[] myArray)
 {
     bool res = true;
     if(myArray.Length==0)
+    {
+        Console.WriteLine("Чтобы взаимодействовать с массивом, нужно сначала добавить в него начальные элементы");
+        Console.Write("Хотите это сделать?(Yes or not): ");
+        string decisionAdd = Console.ReadLine();
+        if(decisionAdd.ToLower() == "yes")
         {
-            Console.WriteLine("Чтобы взаимодействовать с массивом, нужно сначала добавить в него начальные элементы");
-            Console.Write("Хотите это сделать?(Yes or not): ");
-            string decisionAdd = Console.ReadLine();
-            if(decisionAdd.ToLower() == "yes")
-            {
-                SetNumbers(ref myArray);
-                res = true;
-            }
-            else
-            {
-                Console.WriteLine("Добавление отменено)!");
-            }
+            SetNumbers(ref myArray);
+            res = true;
         }
+        else
+        {
+            Console.WriteLine("Добавление отменено)!");
+        }
+    }
     return res;
 }
 
@@ -90,7 +87,7 @@ bool CheckForInteraction(ref string[] myArray)
 
 
 bool isWork = true;
-string[] myArray= {};
+int[] myArray= {};
 while(isWork)
 {
     Console.Write("Напишите команду(Если не знаете команд - напишите -'help'):");
@@ -98,28 +95,28 @@ while(isWork)
     switch(decisionIsWork.ToLower())
     {
         case "sum":
-            int sum = 0;
-            sum = Sum(myArray);
+            int sum = Sum(myArray);
             Console.WriteLine($"Сумма равна {sum}");
             break;
         case "removenumbers":
             if(CheckForInteraction(ref myArray))
-                {
+            {
                 while(isWork)
+                {
+                    Console.Write("Введите число, которое хотите удалить(Или напишите - 'exit', чтобы выйти): ");
+                    string decisionNumber = Console.ReadLine();
+                    if(decisionNumber.ToLower() == "exit")
                     {
-                        Console.Write("Введите число, которое хотите удалить(Или напишите - 'exit', чтобы выйти): ");
-                        string decisionnumber = Console.ReadLine();
-                        if(decisionnumber.ToLower() == "exit")
-                        {
-                            isWork = false;
-                        }
-                        else
-                        {
-                            RemoveNumbers(ref myArray, decisionnumber);
-                        } 
-                        
-                    } 
+                        isWork = false;
+                    }
+                    else
+                    {
+                        RemoveNumbers(ref myArray, decisionNumber);
+                        Console.WriteLine($"Число {number} удалено!("); 
+                    }                
                 }
+            
+            }
             isWork=true;
             break;
         case "addnumbers":          
@@ -135,18 +132,20 @@ while(isWork)
                     }
                     else
                     {
-                            AddNumbers(ref myArray, decision);
-                            Console.WriteLine("Чило было успешно добавлено в массив!)");
+                        AddNumbers(ref myArray, decision);
+                        Console.WriteLine("Чило было успешно добавлено в массив!)");
                     }
                 }
                 isWork = true;
             }
             break;
         case "setnumbers":
+            Console.Write("Введите числа через пробел, которые мы добавим в массив: ");
             SetNumbers(ref myArray);
+            Console.WriteLine("Элементы добавлены)!");
             break;
         case "numbers":
-            if(CheckForInteraction( ref myArray))
+            if(CheckForInteraction(ref myArray))
             {
                 PrintArr(ref myArray);  
             }           
@@ -155,7 +154,7 @@ while(isWork)
             isWork = false;
             break;
         case "help":
-            Console.WriteLine("SetNumbers - запоминание чисел в массив, введенных через пробел.\nAddNumbers - добавление чисел к существующему массиву\nRemoveNumbers - удалить числа из массива, если они там имеются.\nNumbers - вывод текущего массива.")     ;
+            Console.WriteLine("SetNumbers - запоминание чисел в массив, введенных через пробел.\nAddNumbers - добавление чисел к существующему массиву\nRemoveNumbers - удалить числа из массива, если они там имеются.\nNumbers - вывод текущего массива.\nSum - сложиться цифры в массиве. ")     ;
             break;
     }
 }
