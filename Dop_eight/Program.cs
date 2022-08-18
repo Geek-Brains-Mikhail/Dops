@@ -19,10 +19,16 @@ void PrintArr(ref int[] myArray)
     }
     Console.WriteLine();
 }
-void AddNumbers(ref int[] myArray,string decision)   
+void AddNumbers(ref int[] myArray,int lengt)   
 {
-    Array.Resize(ref myArray, (myArray.Length + 1));
-    myArray[myArray.Length - 1] = Convert.ToInt32(decision);
+    int[] myArrayTwo =  Array.ConvertAll(Console.ReadLine().Split( ' ' ),int.Parse);
+    Array.Resize(ref myArray, (myArray.Length + myArrayTwo.Length));
+    for(int i =lengt, b = 0 ; i < myArray.Length;i++,b++)
+    {
+        myArray[i] = myArrayTwo[b];
+    }
+
+
 }
 int RemoveNumbers(ref int[] myArray,string number)
 {
@@ -123,21 +129,9 @@ while(isWork)
         case "addnumbers":          
             if(CheckForInteraction(ref myArray))
             {                
-                while(isWork)
-                {
-                    Console.Write("Напишите число, которое надо добавить:(Если хотите прекратить добавлять числа - напишите 'exit'): ");
-                    string decision = Console.ReadLine();
-                    if(decision.ToLower() == "exit")
-                    {
-                        isWork = false;
-                    }
-                    else
-                    {
-                        AddNumbers(ref myArray, decision);
-                        Console.WriteLine("Число было успешно добавлено в массив!)");
-                    }
-                }
-                isWork = true;
+                Console.Write("Введите числа через пробел, которые надо будет добавить к существующему массиву: ");
+                AddNumbers(ref myArray, myArray.Length);
+                Console.WriteLine("Числа добавлены ")  ;
             }
             break;
         case "setnumbers":
