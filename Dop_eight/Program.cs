@@ -24,7 +24,7 @@ void AddNumbers(ref int[] myArray,string decision)
     Array.Resize(ref myArray, (myArray.Length + 1));
     myArray[myArray.Length - 1] = Convert.ToInt32(decision);
 }
-void RemoveNumbers(ref int[] myArray,string number)
+int RemoveNumbers(ref int[] myArray,string number)
 {
     int icopy =0;
     int[] myarr ={};
@@ -50,6 +50,7 @@ void RemoveNumbers(ref int[] myArray,string number)
     {           
             myArray[c] = myarr[b];
     }
+    return Convert.ToInt32(number);
 }
 int Sum(int[] myArray)
 {
@@ -70,6 +71,7 @@ bool CheckForInteraction(ref int[] myArray)
         string decisionAdd = Console.ReadLine();
         if(decisionAdd.ToLower() == "yes")
         {
+            Console.Write("Введите числа через пробел: "); 
             SetNumbers(ref myArray);
             res = true;
         }
@@ -111,8 +113,7 @@ while(isWork)
                     }
                     else
                     {
-                        RemoveNumbers(ref myArray, decisionNumber);
-                        Console.WriteLine($"Число {number} удалено!("); 
+                        Console.WriteLine($"Число {RemoveNumbers(ref myArray, decisionNumber)} удалено!("); 
                     }                
                 }
             
@@ -133,7 +134,7 @@ while(isWork)
                     else
                     {
                         AddNumbers(ref myArray, decision);
-                        Console.WriteLine("Чило было успешно добавлено в массив!)");
+                        Console.WriteLine("Число было успешно добавлено в массив!)");
                     }
                 }
                 isWork = true;
